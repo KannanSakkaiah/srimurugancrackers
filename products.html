@@ -297,6 +297,23 @@ nav{position:fixed;top:0;width:100%;z-index:900;background:rgba(8,8,14,0.95);bac
   .prod-grid.list-view .add-btn{width:100%}
   .table-summary{flex-direction:column;align-items:flex-start}
 }
+
+/* ===FLOATING BUTTONS=== */
+.float-btns{position:fixed;bottom:24px;right:20px;z-index:850;display:flex;flex-direction:column;gap:12px;align-items:flex-end}
+.float-wa{display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;font-weight:800;font-size:0.82rem;padding:12px 18px 12px 14px;border-radius:50px;box-shadow:0 4px 20px rgba(37,211,102,0.45);cursor:pointer;text-decoration:none;transition:all 0.25s;border:none;white-space:nowrap}
+.float-wa:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 8px 28px rgba(37,211,102,0.55);color:#fff}
+.float-call{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--fire),#FF6B00);color:#fff;font-weight:800;font-size:0.82rem;padding:12px 18px 12px 14px;border-radius:50px;box-shadow:0 4px 20px rgba(255,69,0,0.42);cursor:pointer;text-decoration:none;transition:all 0.25s;border:none;white-space:nowrap}
+.float-call:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 8px 28px rgba(255,69,0,0.52);color:#fff}
+.float-icon{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.float-label{font-size:0.82rem;letter-spacing:0.3px}
+.float-sublabel{font-size:0.62rem;font-weight:600;opacity:0.85;display:block;margin-top:1px}
+@keyframes waPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,0.5)}70%{box-shadow:0 0 0 10px rgba(37,211,102,0)}}
+.float-wa .float-icon{animation:waPulse 2s infinite}
+@media(max-width:480px){
+  .float-wa,.float-call{padding:14px;border-radius:50%}
+  .float-label,.float-sublabel{display:none}
+  .float-icon{width:28px;height:28px;background:none}
+}
 </style>
 </head>
 <body>
@@ -452,6 +469,18 @@ nav{position:fixed;top:0;width:100%;z-index:900;background:rgba(8,8,14,0.95);bac
     <button class="btn-fire" style="width:100%;margin-top:14px;padding:12px" onclick="doLogin()">Login →</button>
     <span class="back-link" onclick="closeAdminLogin()">← Back to Website</span>
   </div>
+</div>
+
+
+<div class="float-btns">
+  <a class="float-wa" href="https://wa.me/919080838592?text=Hi%20Sri%20Murugan%20Crackers!%20I%20want%20to%20enquire%20about%20your%20products." target="_blank" rel="noopener">
+    <span class="float-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.122 1.533 5.854L.057 23.177a.75.75 0 00.766.823l5.535-1.453A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.498-5.2-1.369l-.373-.214-3.868 1.015.978-3.768-.234-.386A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></span>
+    <span><span class="float-label">WhatsApp Us</span><span class="float-sublabel">+91 9080838592</span></span>
+  </a>
+  <a class="float-call" href="tel:+919080838592">
+    <span class="float-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span>
+    <span><span class="float-label">Call Now</span><span class="float-sublabel">+91 9080838592</span></span>
+  </a>
 </div>
 
 <div id="toast"></div>

@@ -9,6 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sri Murugan Crackers – Direct from Sivakasi</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- EmailJS SDK - sends email alerts from static site, no backend needed -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 :root{
   --fire:#FF4500;--gold:#FFB300;--spark:#FFE566;--deep:#08080E;--panel:#101018;
@@ -632,12 +634,65 @@ footer{background:var(--panel);border-top:1px solid var(--border);padding:48px 4
         <div class="ds-card"><div class="ds-n">25K+</div><div class="ds-l">Customers</div></div>
       </div>
       <div class="a-card"><div class="a-card-title">Recent Enquiries</div><div id="dsRecentEnq"><p style="color:var(--muted);font-size:0.82rem">No enquiries yet.</p></div></div>
-      <div class="a-card"><div class="a-card-title">🔔 SMS &amp; Email Notification</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px">SMS Number</div><input id="smsNumber" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" value="+91 9156199201"></div>
-          <div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px">Email Address</div><input id="notifyEmail" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" placeholder="your@email.com"></div>
+      <!-- NOTIFICATION SETUP CARD -->
+      <div class="a-card">
+        <div class="a-card-title">🔔 Email &amp; SMS Notifications</div>
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;line-height:1.7">Configure alerts so you receive an <strong style="color:var(--text)">email + SMS</strong> every time a customer submits a quote.</p>
+
+        <!-- SECTION A: Email via EmailJS -->
+        <div style="background:rgba(255,179,0,0.05);border:1px solid rgba(255,179,0,0.2);border-radius:10px;padding:16px;margin-bottom:14px">
+          <div style="font-weight:800;font-size:0.86rem;color:var(--gold);margin-bottom:4px">📧 Email Alerts (via EmailJS — Free)</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            Setup: <strong style="color:var(--text)">emailjs.com</strong> → Sign up free → Create Email Service → Create Template → copy keys below.
+            <a href="https://www.emailjs.com" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;margin-left:4px">Open EmailJS ↗</a>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div>
+              <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Your Email (to receive alerts)</div>
+              <input id="notifyEmail" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none" placeholder="your@email.com" oninput="NOTIFY_EMAIL=this.value.trim()">
+            </div>
+            <div>
+              <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">EmailJS Public Key</div>
+              <input id="emailjsPublicKey" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none;font-family:monospace" placeholder="e.g. user_xxxxxxxxxxxxxx" oninput="EMAILJS_PUBLIC_KEY=this.value.trim()">
+            </div>
+            <div>
+              <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">EmailJS Service ID</div>
+              <input id="emailjsServiceId" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none;font-family:monospace" placeholder="e.g. service_xxxxxxx" oninput="EMAILJS_SERVICE_ID=this.value.trim()">
+            </div>
+            <div>
+              <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">EmailJS Template ID</div>
+              <input id="emailjsTemplateId" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none;font-family:monospace" placeholder="e.g. template_xxxxxxx" oninput="EMAILJS_TEMPLATE_ID=this.value.trim()">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-add-new" style="margin-bottom:0;font-size:0.76rem;padding:7px 15px" onclick="saveNotifSettings()">💾 Save Email Settings</button>
+            <button onclick="testEmailNow()" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:var(--green);padding:7px 15px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:800">📧 Send Test Email</button>
+          </div>
+          <div id="emailSetupStatus" style="margin-top:10px;font-size:0.74rem;display:none"></div>
         </div>
-        <button class="btn-add-new" style="margin-top:10px;margin-bottom:0;font-size:0.75rem;padding:7px 14px" onclick="toast('✅ Notification settings saved!','ok')">💾 Save</button>
+
+        <!-- SECTION B: SMS via Fast2SMS -->
+        <div style="background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.18);border-radius:10px;padding:16px">
+          <div style="font-weight:800;font-size:0.86rem;color:var(--green);margin-bottom:4px">📲 SMS Alerts (via Fast2SMS — Free)</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            Setup: <strong style="color:var(--text)">fast2sms.com</strong> → Sign up → Dev API → copy Authorization key.
+            <a href="https://www.fast2sms.com" target="_blank" rel="noopener" style="color:var(--green);text-decoration:underline;margin-left:4px">Open Fast2SMS ↗</a>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div>
+              <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">SMS Alert Number (10 digits)</div>
+              <input id="sSMSNum" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none" value="9156199201" oninput="SMS_ALERT_NUM=this.value.replace(/[^0-9]/g,\'\')">
+            </div>
+            <div>
+              <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Fast2SMS API Key</div>
+              <input id="sSMSApiKey" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none;font-family:monospace" placeholder="Paste Fast2SMS API key" oninput="SMS_API_KEY=this.value.trim()">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-add-new" style="margin-bottom:0;font-size:0.76rem;padding:7px 15px" onclick="saveNotifSettings()">💾 Save SMS Settings</button>
+            <button onclick="testSMSNow()" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:var(--green);padding:7px 15px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:800">📲 Test SMS</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1202,13 +1257,32 @@ var TC_CLAUSES = [
   'NEERI certified — eco-friendly green crackers only.'
 ];
 var cart = [];
-var enquiries = [];
 var nextId = 100;
+
+// ── Persistent enquiries via localStorage ──
+function loadEnquiries(){
+  try{
+    var raw = localStorage.getItem('smcEnquiries');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveEnquiriesToStorage(){
+  try{ localStorage.setItem('smcEnquiries', JSON.stringify(enquiries)); }catch(e){}
+}
+var enquiries = loadEnquiries();
+
+// ── EmailJS config (set from Admin → Settings) ──
+var EMAILJS_SERVICE_ID  = '';
+var EMAILJS_TEMPLATE_ID = '';
+var EMAILJS_PUBLIC_KEY  = '';
+var NOTIFY_EMAIL        = '';
+var SMS_API_KEY         = '';
+var SMS_ALERT_NUM       = '9156199201';
 var revIndex = 0;
 var revPerView = 3;
 var ADMIN_U = 'admin', ADMIN_P = 'murugan2026';
 var ADMIN_NOTIF_SMS = '9156199201';
-var ADMIN_NOTIF_EMAIL = 'ahacrackerssivakasi@gmail.com';
+var ADMIN_NOTIF_EMAIL = '';
 
 // ============ UTILS ============
 function goTo(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
@@ -1334,20 +1408,54 @@ function openQuote(){
 }
 function closeQuote(){ document.getElementById('quoteMod').classList.remove('open'); }
 function submitQuote(){
-  var name=(document.getElementById('qN')||{}).value||'';
-  var phone=(document.getElementById('qP')||{}).value||'';
-  var city=(document.getElementById('qC')||{}).value||'';
-  var msg=(document.getElementById('qM')||{}).value||'';
+  var name = (document.getElementById('qN')||{}).value||'';
+  var phone= (document.getElementById('qP')||{}).value||'';
+  var city = (document.getElementById('qC')||{}).value||'';
+  var msg  = (document.getElementById('qM')||{}).value||'';
   name=name.trim(); phone=phone.trim(); city=city.trim(); msg=msg.trim();
   if(!name||!phone){ toast('⚠ Name and phone required!','er'); return; }
-  var total=cart.reduce(function(s,i){ return s+i.price*i.qty; },0);
-  var enq={id:'ENQ'+Date.now(),name:name,phone:phone,city:city,message:msg,items:JSON.parse(JSON.stringify(cart)),total:total,date:new Date().toLocaleString('en-IN')};
+
+  var total = cart.reduce(function(s,i){ return s+i.price*i.qty; },0);
+  var enq = {
+    id   : 'ENQ'+Date.now(),
+    name : name, phone: phone, city: city, message: msg,
+    items: JSON.parse(JSON.stringify(cart)),
+    total: total,
+    date : new Date().toLocaleString('en-IN')
+  };
+
+  // 1. Save to enquiries array + localStorage (persists across page reloads)
   enquiries.unshift(enq);
+  saveEnquiriesToStorage();
+
+  // 2. Open WhatsApp with order details
   sendWA(enq);
+
+  // 3. Download PDF quote
   genPDF(enq);
+
+  // 4. Send Email alert (EmailJS - works from GitHub Pages)
+  sendEmailAlert(enq);
+
+  // 5. Send SMS alert (Fast2SMS via CORS proxy)
   sendSMSAlert(enq);
-  if(document.getElementById('adminWrap').style.display==='block'){ updateAdminDash(); renderAdminEnqs(); }
-  document.getElementById('quoteBox').innerHTML='<div class="success-wrap"><div class="success-ico">🎉</div><h3 style="color:var(--gold);font-family:Cinzel,serif;margin-bottom:8px">Quote Generated!</h3><p style="color:var(--muted);line-height:1.7">Your quote PDF has been downloaded.<br>We will contact you on <strong style="color:var(--text)">'+phone+'</strong> soon!</p><button class="btn-fire" style="margin-top:20px;width:100%;padding:12px" onclick="closeQuote();cart=[];updateCartCount()">Done ✓</button></div>';
+
+  // 6. Refresh admin if open
+  if(document.getElementById('adminWrap').style.display==='block'){
+    updateAdminDash();
+    renderAdminEnqs();
+  }
+
+  // 7. Show success
+  document.getElementById('quoteBox').innerHTML =
+    '<div class="success-wrap">'
+    + '<div class="success-ico">🎉</div>'
+    + '<h3 style="color:var(--gold);font-family:Cinzel,serif;margin-bottom:8px">Quote Generated!</h3>'
+    + '<p style="color:var(--muted);line-height:1.7">Your quote PDF has been downloaded.<br>'
+    + 'We will contact you on <strong style="color:var(--text)">' + phone + '</strong> soon!</p>'
+    + '<p style="font-size:0.78rem;color:var(--green);margin-top:8px">✅ Order saved · WhatsApp sent · Email alert sent</p>'
+    + '<button class="btn-fire" style="margin-top:16px;width:100%;padding:12px" onclick="closeQuote();cart=[];updateCartCount()">Done ✓</button>'
+    + '</div>';
   updateAdminDash();
 }
 
@@ -1524,11 +1632,40 @@ function loadAdmin(){
 
 // ============ ADMIN DASHBOARD ============
 function updateAdminDash(){
-  document.getElementById('dsProd').textContent=PRODUCTS.length;
-  document.getElementById('dsEnq').textContent=enquiries.length;
-  var re=document.getElementById('dsRecentEnq');
-  if(!enquiries.length){ re.innerHTML='<p style="color:var(--muted);font-size:0.8rem">No enquiries yet.</p>'; return; }
-  re.innerHTML=enquiries.slice(0,3).map(function(e){ return '<div style="padding:9px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--gold)">'+e.name+'</strong> · '+e.phone+' · <span style="color:var(--green)">'+fmt(e.total)+'</span><div style="font-size:0.7rem;color:var(--muted)">'+e.date+'</div></div>'; }).join('');
+  // Reload from localStorage to always be fresh
+  enquiries = loadEnquiries();
+  var prodEl = document.getElementById('dsProd');
+  var enqEl  = document.getElementById('dsEnq');
+  if(prodEl) prodEl.textContent = PRODUCTS.length;
+  if(enqEl)  enqEl.textContent  = enquiries.length;
+  // Update cart badge
+  updateCartCount();
+  var re = document.getElementById('dsRecentEnq');
+  if(!re) return;
+  if(!enquiries.length){
+    re.innerHTML = '<p style="color:var(--muted);font-size:0.8rem;padding:8px 0">No enquiries yet. They appear here when customers download quotes.</p>';
+    return;
+  }
+  re.innerHTML = enquiries.slice(0,5).map(function(e){
+    var pc = e.phone.replace(/[^0-9]/g,'');
+    return '<div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+      + '<div>'
+        + '<div style="font-weight:800;color:var(--gold)">' + e.name + ' <span style="font-size:0.65rem;background:rgba(34,197,94,0.15);color:var(--green);padding:2px 6px;border-radius:50px;font-weight:800">New</span></div>'
+        + '<div style="font-size:0.76rem;color:var(--muted);margin-top:2px">📱 ' + e.phone + (e.city?' · 📍'+e.city:'') + '</div>'
+        + '<div style="font-size:0.7rem;color:var(--muted);margin-top:1px">🕐 ' + e.date + ' · <strong style="color:var(--text)">' + e.id + '</strong></div>'
+      + '</div>'
+      + '<div style="text-align:right;flex-shrink:0">'
+        + '<div style="font-family:Cinzel,serif;font-weight:900;color:var(--gold);font-size:1rem">' + fmt(e.total) + '</div>'
+        + '<div style="display:flex;gap:5px;margin-top:5px;justify-content:flex-end">'
+          + '<a href="https://wa.me/91'+pc+'" target="_blank" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.28);color:var(--green);padding:3px 9px;border-radius:6px;font-size:0.68rem;font-weight:800;text-decoration:none">💬 WA</a>'
+          + '<a href="tel:'+e.phone+'" style="background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.28);color:var(--gold);padding:3px 9px;border-radius:6px;font-size:0.68rem;font-weight:800;text-decoration:none">📞 Call</a>'
+        + '</div>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+  if(enquiries.length > 5){
+    re.innerHTML += '<div style="text-align:center;padding:8px;font-size:0.76rem;color:var(--muted);cursor:pointer;transition:color 0.2s" onclick="aTab('enqs',document.getElementById('tab-enqs'))" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">View all ' + enquiries.length + ' enquiries →</div>';
+  }
 }
 
 // ============ ADMIN PRODUCTS ============
@@ -2153,6 +2290,108 @@ function saveStateMOV(){
     if(sn) r.note  = sn.value.trim();
   });
   toast('✅ State MOV settings saved!','ok');
+}
+
+// ============ NOTIFICATION SETTINGS ============
+function saveNotifSettings(){
+  // Email settings
+  var svcEl  = document.getElementById('emailjsServiceId');
+  var tplEl  = document.getElementById('emailjsTemplateId');
+  var keyEl  = document.getElementById('emailjsPublicKey');
+  var emlEl  = document.getElementById('notifyEmail');
+  if(svcEl  && svcEl.value.trim())  EMAILJS_SERVICE_ID  = svcEl.value.trim();
+  if(tplEl  && tplEl.value.trim())  EMAILJS_TEMPLATE_ID = tplEl.value.trim();
+  if(keyEl  && keyEl.value.trim())  EMAILJS_PUBLIC_KEY  = keyEl.value.trim();
+  if(emlEl  && emlEl.value.trim())  NOTIFY_EMAIL        = emlEl.value.trim();
+  // SMS settings
+  var smsEl  = document.getElementById('sSMSNum');
+  var apiEl  = document.getElementById('sSMSApiKey');
+  if(smsEl  && smsEl.value.trim())  SMS_ALERT_NUM = smsEl.value.replace(/[^0-9]/g,'');
+  if(apiEl  && apiEl.value.trim())  SMS_API_KEY   = apiEl.value.trim();
+
+  // Show status
+  var status = [];
+  if(EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && NOTIFY_EMAIL)
+    status.push('<span style="color:var(--green)">✅ Email: Configured</span>');
+  else
+    status.push('<span style="color:var(--gold)">⚠ Email: Incomplete setup</span>');
+  if(SMS_API_KEY && SMS_ALERT_NUM)
+    status.push('<span style="color:var(--green)">✅ SMS: Configured</span>');
+  else
+    status.push('<span style="color:var(--gold)">⚠ SMS: API key missing</span>');
+
+  var stEl = document.getElementById('emailSetupStatus');
+  if(stEl){ stEl.innerHTML = status.join(' &nbsp; '); stEl.style.display='block'; }
+  toast('✅ Notification settings saved!','ok');
+}
+
+function testEmailNow(){
+  var svcEl = document.getElementById('emailjsServiceId');
+  var tplEl = document.getElementById('emailjsTemplateId');
+  var keyEl = document.getElementById('emailjsPublicKey');
+  var emlEl = document.getElementById('notifyEmail');
+  if(svcEl && svcEl.value.trim()) EMAILJS_SERVICE_ID  = svcEl.value.trim();
+  if(tplEl && tplEl.value.trim()) EMAILJS_TEMPLATE_ID = tplEl.value.trim();
+  if(keyEl && keyEl.value.trim()) EMAILJS_PUBLIC_KEY  = keyEl.value.trim();
+  if(emlEl && emlEl.value.trim()) NOTIFY_EMAIL        = emlEl.value.trim();
+
+  if(!EMAILJS_PUBLIC_KEY||!EMAILJS_SERVICE_ID||!EMAILJS_TEMPLATE_ID){
+    toast('⚠ Fill in all 3 EmailJS fields first!','er'); return;
+  }
+  if(!NOTIFY_EMAIL){ toast('⚠ Enter your email address first!','er'); return; }
+
+  toast('📧 Sending test email...','in');
+  var testEnq = {
+    id:'TEST-'+Date.now(), name:'Test Customer', phone:'+91 9999999999',
+    city:'Test City', date: new Date().toLocaleString('en-IN'),
+    items:[{em:'✨',name:'Gold Sparklers',qty:25,price:155}],
+    total:3875, message:'This is a test alert from Sri Murugan Crackers admin portal.'
+  };
+  sendEmailAlert(testEnq);
+}
+
+// ============ EMAIL ALERT via EmailJS ============
+function sendEmailAlert(enq){
+  // Sync latest config from admin fields
+  var svcEl  = document.getElementById('emailjsServiceId');
+  var tplEl  = document.getElementById('emailjsTemplateId');
+  var keyEl  = document.getElementById('emailjsPublicKey');
+  var emlEl  = document.getElementById('notifyEmail');
+
+  if(svcEl && svcEl.value.trim()) EMAILJS_SERVICE_ID  = svcEl.value.trim();
+  if(tplEl && tplEl.value.trim()) EMAILJS_TEMPLATE_ID = tplEl.value.trim();
+  if(keyEl && keyEl.value.trim()) EMAILJS_PUBLIC_KEY   = keyEl.value.trim();
+  if(emlEl && emlEl.value.trim()) NOTIFY_EMAIL         = emlEl.value.trim();
+
+  if(!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY){
+    console.warn('EmailJS not configured. Set up in Admin → Dashboard → Notifications.');
+    return;
+  }
+
+  var prodList = enq.items.map(function(it){
+    return it.name + ' x' + it.qty + ' = ' + fmt(it.price * it.qty);
+  }).join('\n');
+
+  var params = {
+    to_email   : NOTIFY_EMAIL || 'ahacrackerssivakasi@gmail.com',
+    from_name  : 'Sri Murugan Crackers Website',
+    enquiry_id : enq.id,
+    cust_name  : enq.name,
+    cust_phone : enq.phone,
+    cust_city  : enq.city || 'N/A',
+    order_date : enq.date,
+    products   : prodList,
+    total      : fmt(enq.total),
+    message    : enq.message || 'None',
+    reply_to   : 'noreply@srimurugancrackers.in'
+  };
+
+  try {
+    emailjs.init({publicKey: EMAILJS_PUBLIC_KEY});
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+      .then(function(){ toast('✅ Email alert sent!','ok'); })
+      .catch(function(err){ console.warn('EmailJS error:', err); });
+  } catch(e){ console.warn('EmailJS not loaded:', e.message); }
 }
 
 // ============ INIT ============

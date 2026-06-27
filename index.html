@@ -681,7 +681,7 @@ footer{background:var(--panel);border-top:1px solid var(--border);padding:48px 4
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
             <div>
               <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">SMS Alert Number (10 digits)</div>
-              <input id="sSMSNum" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none" value="9156199201" oninput="SMS_ALERT_NUM=this.value.replace(/[^0-9]/g,\'\')">
+              <input id="sSMSNum" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:0.82rem;outline:none" value="9156199201" oninput="SMS_ALERT_NUM=this.value.replace(/[^0-9]/g,'')">
             </div>
             <div>
               <div style="font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Fast2SMS API Key</div>
@@ -1074,7 +1074,7 @@ footer{background:var(--panel);border-top:1px solid var(--border);padding:48px 4
               <div class="fg"><label>Company Name</label><input id="sCompanyName" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" value="Sri Murugan Crackers"></div>
               <div class="fg"><label>Contact Phone</label><input id="sPrimPhone" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" value="+91 9156199201"></div>
               <div class="fg"><label>WhatsApp Number</label><input id="sWAPhone" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" value="9156199201"></div>
-              <div class="fg"><label>Email</label><input id="sEmail" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" placeholder="ahacrackerssivakasi@gmail.com"></div>
+              <div class="fg"><label>Email</label><input id="sEmail" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" placeholder="srimurugancrackerssivakasi18@gmail.com"></div>
               <div class="fg"><label>SMS Alert Number</label><input id="sSMSNum" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none" value="9156199201"></div>
               <div class="fg"><label>Fast2SMS API Key <span style="color:var(--gold);font-size:0.65rem;font-weight:800;background:rgba(255,179,0,0.1);padding:2px 6px;border-radius:4px">for SMS alerts</span></label><input id="sSMSApiKey" type="text" style="width:100%;background:var(--deep);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-size:0.84rem;outline:none;font-family:monospace" placeholder="Paste your Fast2SMS API key here" oninput="SMS_API_KEY=this.value.trim();SMS_ALERT_NUM=document.getElementById('sSMSNum').value.replace(/[^0-9]/g,'')"><div style="font-size:0.66rem;color:var(--muted);margin-top:4px">Get free API key at <strong style="color:var(--gold)">fast2sms.com</strong> → signup → Dev API → copy key</div>
 <button onclick="testSMSNow()" style="margin-top:8px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:var(--green);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:0.76rem;font-weight:800">📲 Test SMS Now</button></div>
@@ -1280,7 +1280,7 @@ var SMS_API_KEY         = '';
 var SMS_ALERT_NUM       = '9156199201';
 var revIndex = 0;
 var revPerView = 3;
-var ADMIN_U = 'admin', ADMIN_P = 'murugan2026';
+var ADMIN_U = 'admin', ADMIN_P = 'murugan2024';
 var ADMIN_NOTIF_SMS = '9156199201';
 var ADMIN_NOTIF_EMAIL = '';
 
@@ -2373,7 +2373,7 @@ function sendEmailAlert(enq){
   }).join('\n');
 
   var params = {
-    to_email   : NOTIFY_EMAIL || 'ahacrackerssivakasi@gmail.com',
+    to_email   : NOTIFY_EMAIL || 'srimurugancrackerssivakasi18@gmail.com',
     from_name  : 'Sri Murugan Crackers Website',
     enquiry_id : enq.id,
     cust_name  : enq.name,
@@ -2383,7 +2383,7 @@ function sendEmailAlert(enq){
     products   : prodList,
     total      : fmt(enq.total),
     message    : enq.message || 'None',
-    reply_to   : 'noreply@srimurugancrackers.in'
+    reply_to   : 'srimurugancrackerssivakasi18@gmail.com'
   };
 
   try {
